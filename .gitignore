@@ -1,0 +1,14 @@
+*.swp
+.idea/
+.env
+# Ignore bundler config.
+/.bundle
+
+.nyc_output
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+/tmp
+node_modules
+coverage
