@@ -1,11 +1,11 @@
 {
-  "name": "ss-octopus",
+  "name": "js-nat-ui",
   "version": "1.0.0",
-  "description": "React, Redux, Hapi, Babel, Browserify, Tcomb, Ava starter app",
+  "description": "Vote and manage Games",
   "author": "Nate Geslin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/n8rzz/ss-octopus.git"
+    "url": "https://github.com/n8rzz/games-ui.git"
   },
   "main": "index.js",
   "scripts": {
