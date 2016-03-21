@@ -14,7 +14,20 @@ export const GameType = t.struct({
     id: UUID,
     title: t.String,
     votes: Positive,
-    status: GameStatusType
+    status: t.String // GameStatusType
 }, 'GameType');
 
 export const GameListType = t.list( GameType, 'GameListType');
+
+const BaseGameStateType = t.struct({
+    isLoading: t.Boolean,
+    errors: t.maybe(t.Error)
+});
+
+export const SingleGameStateType = BaseGameStateType.extend({
+    payload: t.maybe(GameType)
+}, 'SingleGameStateType');
+
+export const ListGameStateType = BaseGameStateType.extend({
+    payload: t.maybe(GameListType)
+}, 'ListGameStateType');

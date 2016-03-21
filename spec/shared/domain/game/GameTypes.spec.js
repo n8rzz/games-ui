@@ -6,7 +6,9 @@ import {
     NewGameType,
     GameStatusType,
     GameType,
-    GameListType
+    GameListType,
+    SingleGameStateType,
+    ListGameStateType
 } from '../../../../src/scripts/shared/domain/game/GameTypes';
 
 const {
@@ -15,7 +17,9 @@ const {
     VALID_GAME,
     INVALID_GAME,
     VALID_GAME_LIST,
-    INVALID_GAME_LIST
+    INVALID_GAME_LIST,
+    VALID_GAME_STATE,
+    VALID_GAME_LIST_STATE
 } = Fixtures.game;
 
 ava('NewGameType accepts valid data', t => {
@@ -39,4 +43,12 @@ ava('GameListType accepts valid data', t => {
     t.ok(GameListType(VALID_GAME_LIST));
 
     t.throws(() => GameListType(INVALID_GAME_LIST));
+});
+
+ava('SingleGameStateType accepts valid data', t => {
+    t.ok(SingleGameStateType(VALID_GAME_STATE));
+});
+
+ava('ListGameStateType accepts valid data', t => {
+    t.ok(ListGameStateType(VALID_GAME_LIST_STATE));
 });

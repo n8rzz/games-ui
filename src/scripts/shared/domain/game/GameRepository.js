@@ -1,10 +1,10 @@
 import request from 'axios';
-import { ENDPOINTS } from '../endpoints';
+import { ENDPOINTS_GAMES } from '../endpoints';
 
-const ENDPOINT = `${ENDPOINTS}/books`;
+const ENDPOINT = `${ENDPOINTS_GAMES}/games`;
 
 export default {
-    getBookList: () => {
+    getGamesList: () => {
         return request.get(`${ENDPOINT}`)
             .then(response => response)
             .catch(error => {

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getBookList } from '../actions/books/BookActions';
+import { getGamesList } from '../domain/game/actions/GameListActions';
 
 /**
  * React entry component
@@ -11,17 +11,19 @@ import { getBookList } from '../actions/books/BookActions';
 export class App extends React.Component {
 
     /**
-     * @method  composeBookList
+     * @method composeGameList
      * @return {JSX}
      */
-    composeBookList() {
-        const { books } = this.props;
+    composeGameList() {
+        const { games } = this.props;
 
-        return books.map((book, index) => {
+        return games.map((game, index) => {
             return (
                 <li key={ index }>
-                    <div>ID: { book.id }</div>
-                    <div>Title: { book.title }</div>
+                    <div>ID: { game.id }</div>
+                    <div>Title: { game.title }</div>
+                    <div>Votes: { game.votes }</div>
+                    <div>Status: { game.status }</div>
                 </li>
             );
         });
@@ -32,13 +34,12 @@ export class App extends React.Component {
      * @return {JSX}
      */
     render() {
-        if (this.props.books) {
+        if (this.props.games) {
             return (
                 <div>
-                    <h1>Books</h1>
-                    <h3>... with actions and reducers</h3>
+                    <h1>Games</h1>
                     <ul>
-                        { this.composeBookList() }
+                        { this.composeGameList() }
                     </ul>
                 </div>
             );
@@ -65,10 +66,10 @@ App.displayName = 'App';
  */
 App.propTypes = {
     /**
-     * @props books
+     * @props games
      * @type Array
      */
-    books: PropTypes.array
+    games: PropTypes.array
 };
 
 /**
@@ -78,7 +79,7 @@ App.propTypes = {
  */
 function mapStateToProps(state) {
     return {
-        books: state.books.payload
+        games: state.games.payload
     };
 }
 
@@ -89,7 +90,7 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
     return {
-        books: dispatch(getBookList())
+        games: dispatch(getGamesList())
     };
 }
 

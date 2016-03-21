@@ -32,3 +32,18 @@ export const INVALID_GAME_LIST = [
     VALID_GAME,
     INVALID_GAME
 ];
+
+const BaseGameStateType = {
+    isLoading: true,
+    errors: null
+};
+
+export const VALID_GAME_STATE = {
+    ...BaseGameStateType,
+    payload: VALID_GAME
+};
+
+export const VALID_GAME_LIST_STATE = {
+    ...BaseGameStateType,
+    payload: VALID_GAME_LIST
+};

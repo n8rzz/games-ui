@@ -27822,62 +27822,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // application entry point
 (0, _client2.default)(_reducer2.default, _routes2.default);
 
-},{"../shared/reducer":312,"../shared/routes":314,"./client":304}],306:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getBookList = exports.GET_BOOK_LIST_FAIL = exports.GET_BOOK_LIST_SUCCESS = exports.GET_BOOK_LIST_START = undefined;
-
-var _BookRepository = require('../../domain/book/BookRepository');
-
-var _BookRepository2 = _interopRequireDefault(_BookRepository);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var GET_BOOK_LIST_START = exports.GET_BOOK_LIST_START = 'GET_BOOK_LIST_START';
-var GET_BOOK_LIST_SUCCESS = exports.GET_BOOK_LIST_SUCCESS = 'GET_BOOK_LIST_SUCCESS';
-var GET_BOOK_LIST_FAIL = exports.GET_BOOK_LIST_FAIL = 'GET_BOOK_LIST_FAIL';
-
-/* istanbul ignore next */
-var getBookListStart = function getBookListStart() {
-    return {
-        type: GET_BOOK_LIST_START
-    };
-};
-
-/* istanbul ignore next */
-var getBookListSuccess = function getBookListSuccess(payload) {
-    return {
-        type: GET_BOOK_LIST_SUCCESS,
-        payload: payload
-    };
-};
-
-/* istanbul ignore next */
-var getBookListError = function getBookListError(errors) {
-    return {
-        type: GET_BOOK_LIST_SUCCESS,
-        payload: null,
-        errors: errors
-    };
-};
-
-var getBookList = exports.getBookList = function getBookList() {
-    return function (dispatch) {
-        dispatch(getBookListStart());
-
-        return _BookRepository2.default.getBookList().then(function (response) {
-            return dispatch(getBookListSuccess(response));
-        }).catch(function (error) {
-            dispatch(getBookListError(error));
-            throw error;
-        });
-    };
-};
-
-},{"../../domain/book/BookRepository":309}],307:[function(require,module,exports){
+},{"../shared/reducer":313,"../shared/routes":314,"./client":304}],306:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27893,7 +27838,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = require('react-redux');
 
-var _BookActions = require('../actions/books/BookActions');
+var _GameListActions = require('../domain/game/actions/GameListActions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27920,18 +27865,18 @@ var App = exports.App = function (_React$Component) {
     }
 
     _createClass(App, [{
-        key: 'composeBookList',
+        key: 'composeGameList',
 
 
         /**
-         * @method  composeBookList
+         * @method composeGameList
          * @return {JSX}
          */
-        value: function composeBookList() {
-            var books = this.props.books;
+        value: function composeGameList() {
+            var games = this.props.games;
 
 
-            return books.map(function (book, index) {
+            return games.map(function (game, index) {
                 return _react2.default.createElement(
                     'li',
                     { key: index },
@@ -27939,13 +27884,25 @@ var App = exports.App = function (_React$Component) {
                         'div',
                         null,
                         'ID: ',
-                        book.id
+                        game.id
                     ),
                     _react2.default.createElement(
                         'div',
                         null,
                         'Title: ',
-                        book.title
+                        game.title
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'Votes: ',
+                        game.votes
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        'Status: ',
+                        game.status
                     )
                 );
             });
@@ -27959,24 +27916,19 @@ var App = exports.App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            if (this.props.books) {
+            if (this.props.games) {
                 return _react2.default.createElement(
                     'div',
                     null,
                     _react2.default.createElement(
                         'h1',
                         null,
-                        'Books'
-                    ),
-                    _react2.default.createElement(
-                        'h3',
-                        null,
-                        '... with actions and reducers'
+                        'Games'
                     ),
                     _react2.default.createElement(
                         'ul',
                         null,
-                        this.composeBookList()
+                        this.composeGameList()
                     )
                 );
             }
@@ -28011,10 +27963,10 @@ App.displayName = 'App';
  */
 App.propTypes = {
     /**
-     * @props books
+     * @props games
      * @type Array
      */
-    books: _react.PropTypes.array
+    games: _react.PropTypes.array
 };
 
 /**
@@ -28024,7 +27976,7 @@ App.propTypes = {
  */
 function mapStateToProps(state) {
     return {
-        books: state.books.payload
+        games: state.games.payload
     };
 }
 
@@ -28035,7 +27987,7 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
     return {
-        books: dispatch((0, _BookActions.getBookList)())
+        games: dispatch((0, _GameListActions.getGamesList)())
     };
 }
 
@@ -28052,7 +28004,7 @@ function mergeProps(state, dispatch, ownProps) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps, mergeProps)(App);
 
-},{"../actions/books/BookActions":306,"react":243,"react-redux":22}],308:[function(require,module,exports){
+},{"../domain/game/actions/GameListActions":311,"react":243,"react-redux":22}],307:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28078,7 +28030,21 @@ var UUID = exports.UUID = _tcomb2.default.refinement(_tcomb2.default.String, fun
     return REGEX.UUID.test(s);
 }, 'UUID');
 
-},{"tcomb":256}],309:[function(require,module,exports){
+},{"tcomb":256}],308:[function(require,module,exports){
+(function (global){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+global.ENDPOINT = 'http://localhost:3002';
+
+var ENDPOINTS = exports.ENDPOINTS = 'http://localhost:3002';
+var ENDPOINTS_GAMES = exports.ENDPOINTS_GAMES = 'http://localhost:3003';
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{}],309:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28093,10 +28059,10 @@ var _endpoints = require('../endpoints');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var ENDPOINT = _endpoints.ENDPOINTS + '/books';
+var ENDPOINT = _endpoints.ENDPOINTS_GAMES + '/games';
 
 exports.default = {
-    getBookList: function getBookList() {
+    getGamesList: function getGamesList() {
         return _axios2.default.get('' + ENDPOINT).then(function (response) {
             return response;
         }).catch(function (error) {
@@ -28105,13 +28071,13 @@ exports.default = {
     }
 };
 
-},{"../endpoints":311,"axios":1}],310:[function(require,module,exports){
+},{"../endpoints":308,"axios":1}],310:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.BookListStateType = exports.BookStateType = exports.BookListType = exports.BookType = undefined;
+exports.ListGameStateType = exports.SingleGameStateType = exports.GameListType = exports.GameType = exports.GameStatusType = exports.NewGameType = undefined;
 
 var _tcomb = require('tcomb');
 
@@ -28121,61 +28087,93 @@ var _BaseTypes = require('../BaseTypes');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var BookType = exports.BookType = _tcomb2.default.struct({
+var NewGameType = exports.NewGameType = _tcomb2.default.struct({
+    title: _tcomb2.default.String
+}, 'NewGameType');
+
+var GameStatusType = exports.GameStatusType = _tcomb2.default.enums({
+    ownit: 'ownit',
+    wantit: 'wantit'
+}, 'GameStatusType');
+
+var GameType = exports.GameType = _tcomb2.default.struct({
     id: _BaseTypes.UUID,
     title: _tcomb2.default.String,
-    pages: _BaseTypes.Positive
-}, 'BookType');
+    votes: _BaseTypes.Positive,
+    status: _tcomb2.default.String // GameStatusType
+}, 'GameType');
 
-var BookListType = exports.BookListType = _tcomb2.default.list(BookType, 'BookListType');
+var GameListType = exports.GameListType = _tcomb2.default.list(GameType, 'GameListType');
 
-var BookStateType = exports.BookStateType = _tcomb2.default.struct({
+var BaseGameStateType = _tcomb2.default.struct({
     isLoading: _tcomb2.default.Boolean,
-    payload: _tcomb2.default.maybe(BookType),
     errors: _tcomb2.default.maybe(_tcomb2.default.Error)
-}, 'BookStateType');
-
-var BookListStateType = exports.BookListStateType = _tcomb2.default.struct({
-    isLoading: _tcomb2.default.Boolean,
-    payload: _tcomb2.default.maybe(BookListType),
-    errors: _tcomb2.default.maybe(_tcomb2.default.Error)
-}, 'BookListStateType');
-
-},{"../BaseTypes":308,"tcomb":256}],311:[function(require,module,exports){
-(function (global){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
 });
-global.ENDPOINT = 'http://localhost:3002';
 
-var ENDPOINTS = exports.ENDPOINTS = 'http://localhost:3002';
+var SingleGameStateType = exports.SingleGameStateType = BaseGameStateType.extend({
+    payload: _tcomb2.default.maybe(GameType)
+}, 'SingleGameStateType');
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+var ListGameStateType = exports.ListGameStateType = BaseGameStateType.extend({
+    payload: _tcomb2.default.maybe(GameListType)
+}, 'ListGameStateType');
 
-},{}],312:[function(require,module,exports){
+},{"../BaseTypes":307,"tcomb":256}],311:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.getGamesList = exports.GET_GAME_LIST_FAIL = exports.GET_GAME_LIST_SUCCESS = exports.GET_GAME_LIST_START = undefined;
 
-var _redux = require('redux');
+var _GameRepository = require('../GameRepository');
 
-var _BooksReducer = require('./reducers/books/BooksReducer.js');
-
-var _BooksReducer2 = _interopRequireDefault(_BooksReducer);
+var _GameRepository2 = _interopRequireDefault(_GameRepository);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function () {
-    return (0, _redux.combineReducers)({
-        books: _BooksReducer2.default
-    });
+var GET_GAME_LIST_START = exports.GET_GAME_LIST_START = 'GET_GAME_LIST_START';
+var GET_GAME_LIST_SUCCESS = exports.GET_GAME_LIST_SUCCESS = 'GET_GAME_LIST_SUCCESS';
+var GET_GAME_LIST_FAIL = exports.GET_GAME_LIST_FAIL = 'GET_GAME_LIST_FAIL';
+
+/* istanbul ignore next */
+var getGameListStart = function getGameListStart() {
+    return {
+        type: GET_GAME_LIST_START
+    };
 };
 
-},{"./reducers/books/BooksReducer.js":313,"redux":251}],313:[function(require,module,exports){
+/* istanbul ignore next */
+var getGameListSuccess = function getGameListSuccess(payload) {
+    return {
+        type: GET_GAME_LIST_SUCCESS,
+        payload: payload
+    };
+};
+
+/* istanbul ignore next */
+var getGameListError = function getGameListError(errors) {
+    return {
+        type: GET_GAME_LIST_SUCCESS,
+        payload: null,
+        errors: errors
+    };
+};
+
+var getGamesList = exports.getGamesList = function getGamesList() {
+    return function (dispatch) {
+        dispatch(getGameListStart());
+
+        return _GameRepository2.default.getGamesList().then(function (response) {
+            return dispatch(getGameListSuccess(response));
+        }).catch(function (error) {
+            dispatch(getGameListError(error));
+            throw error;
+        });
+    };
+};
+
+},{"../GameRepository":309}],312:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28186,33 +28184,33 @@ var _createReducer;
 
 var _reduxCreateReducer = require('redux-create-reducer');
 
-var _BookTypes = require('../../domain/book/BookTypes');
+var _GameTypes = require('../GameTypes');
 
-var _BookActions = require('../../actions/books/BookActions');
+var _GameListActions = require('../actions/GameListActions');
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var INITIAL_STATE = new _BookTypes.BookListStateType({
+var INITIAL_STATE = new _GameTypes.ListGameStateType({
     isLoading: false,
     payload: [],
     errors: null
 });
 
 var mergeState = function mergeState(state, updates) {
-    return _BookTypes.BookListStateType.update(state, { $merge: updates });
+    return _GameTypes.ListGameStateType.update(state, { $merge: updates });
 };
 
-exports.default = (0, _reduxCreateReducer.createReducer)(INITIAL_STATE, (_createReducer = {}, _defineProperty(_createReducer, _BookActions.GET_BOOK_LIST_START, function () {
+exports.default = (0, _reduxCreateReducer.createReducer)(INITIAL_STATE, (_createReducer = {}, _defineProperty(_createReducer, _GameListActions.GET_GAME_LIST_START, function () {
     return mergeState(INITIAL_STATE, {
         isLoading: true
     });
-}), _defineProperty(_createReducer, _BookActions.GET_BOOK_LIST_SUCCESS, function (state, _ref) {
+}), _defineProperty(_createReducer, _GameListActions.GET_GAME_LIST_SUCCESS, function (state, _ref) {
     var payload = _ref.payload;
     return mergeState(state, {
         isLoading: false,
         payload: payload.data
     });
-}), _defineProperty(_createReducer, _BookActions.GET_BOOK_LIST_FAIL, function (state, _ref2) {
+}), _defineProperty(_createReducer, _GameListActions.GET_GAME_LIST_FAIL, function (state, _ref2) {
     var errors = _ref2.errors;
     return mergeState(state, {
         isLoading: false,
@@ -28220,7 +28218,28 @@ exports.default = (0, _reduxCreateReducer.createReducer)(INITIAL_STATE, (_create
     });
 }), _createReducer));
 
-},{"../../actions/books/BookActions":306,"../../domain/book/BookTypes":310,"redux-create-reducer":244}],314:[function(require,module,exports){
+},{"../GameTypes":310,"../actions/GameListActions":311,"redux-create-reducer":244}],313:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _redux = require('redux');
+
+var _GameListReducer = require('./domain/game/reducers/GameListReducer');
+
+var _GameListReducer2 = _interopRequireDefault(_GameListReducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+    return (0, _redux.combineReducers)({
+        games: _GameListReducer2.default
+    });
+};
+
+},{"./domain/game/reducers/GameListReducer":312,"redux":251}],314:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28247,7 +28266,7 @@ var _content2 = _interopRequireDefault(_content);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./content":307,"react":243,"react-router":58}]},{},[305])
+},{"./content":306,"react":243,"react-router":58}]},{},[305])
 
 
 //# sourceMappingURL=bundle.js.map
