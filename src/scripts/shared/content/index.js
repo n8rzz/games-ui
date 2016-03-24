@@ -15,8 +15,6 @@ export class App extends React.Component {
     render() {
         return (
             <div>
-                <div>HEADER</div>
-
                 { this.props.children }
             </div>
         );

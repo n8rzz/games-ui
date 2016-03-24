@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 
 /**
  * React entry component
@@ -16,9 +17,13 @@ export default class GameList extends React.Component {
         const { games } = this.props;
 
         return games.map((game, index) => {
+            const pathToSingleGame = `/games/${game.id}`;
+
             return (
                 <li key={ index }>
-                    <div>ID: { game.id }</div>
+                    <div>
+                        ID: <Link to={ pathToSingleGame }>{ game.id }</Link>
+                    </div>
                     <div>Title: { game.title }</div>
                     <div>Votes: { game.votes }</div>
                     <div>Status: { game.status }</div>
@@ -36,6 +41,9 @@ export default class GameList extends React.Component {
             return (
                 <div>
                     <h1>Games</h1>
+                    <div>
+                        <a href="#">Add Game</a>
+                    </div>
                     <ul>
                         { this.composeGameList() }
                     </ul>

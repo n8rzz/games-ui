@@ -27822,7 +27822,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // application entry point
 (0, _client2.default)(_reducer2.default, _routes2.default);
 
-},{"../shared/reducer":315,"../shared/routes":316,"./client":304}],306:[function(require,module,exports){
+},{"../shared/reducer":319,"../shared/routes":320,"./client":304}],306:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27834,6 +27834,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27872,6 +27874,8 @@ var GameList = function (_React$Component) {
 
 
             return games.map(function (game, index) {
+                var pathToSingleGame = '/games/' + game.id;
+
                 return _react2.default.createElement(
                     'li',
                     { key: index },
@@ -27879,7 +27883,11 @@ var GameList = function (_React$Component) {
                         'div',
                         null,
                         'ID: ',
-                        game.id
+                        _react2.default.createElement(
+                            _reactRouter.Link,
+                            { to: pathToSingleGame },
+                            game.id
+                        )
                     ),
                     _react2.default.createElement(
                         'div',
@@ -27919,6 +27927,15 @@ var GameList = function (_React$Component) {
                         'h1',
                         null,
                         'Games'
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { href: '#' },
+                            'Add Game'
+                        )
                     ),
                     _react2.default.createElement(
                         'ul',
@@ -27965,7 +27982,7 @@ GameList.propTypes = {
     games: _react.PropTypes.array
 };
 
-},{"react":243}],307:[function(require,module,exports){
+},{"react":243,"react-router":58}],307:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27996,9 +28013,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * React entry component
- * All other components will inherit from this component
- *
  * @class  GameListContainer
  */
 
@@ -28016,7 +28030,7 @@ var GameListContainer = exports.GameListContainer = function (_React$Component) 
 
 
         /**
-         * @method  render
+         * @method render
          * @return {JSX}
          */
         value: function render() {
@@ -28087,7 +28101,250 @@ function mergeProps(state, dispatch, ownProps) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps, mergeProps)(GameListContainer);
 
-},{"../../../domain/game/actions/GameListActions":313,"./GameList":306,"react":243,"react-redux":22}],308:[function(require,module,exports){
+},{"../../../domain/game/actions/GameListActions":315,"./GameList":306,"react":243,"react-redux":22}],308:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.SingleGameContainer = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = require('react-redux');
+
+var _SingleGameActions = require('../../../domain/game/actions/SingleGameActions');
+
+var _SingleGameView = require('./SingleGameView');
+
+var _SingleGameView2 = _interopRequireDefault(_SingleGameView);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @class SingleGameContainer
+ */
+
+var SingleGameContainer = exports.SingleGameContainer = function (_React$Component) {
+    _inherits(SingleGameContainer, _React$Component);
+
+    function SingleGameContainer() {
+        _classCallCheck(this, SingleGameContainer);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(SingleGameContainer).apply(this, arguments));
+    }
+
+    _createClass(SingleGameContainer, [{
+        key: 'componentWillMount',
+
+        /**
+         * @method componentWillMount
+         * @return {Function}
+         */
+        value: function componentWillMount() {
+            return this.props.getSingleGame(this.props.params.id);
+        }
+
+        /**
+         * @method render
+         * @return {JSX}
+         */
+
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(_SingleGameView2.default, this.props)
+            );
+        }
+    }]);
+
+    return SingleGameContainer;
+}(_react2.default.Component);
+
+/**
+ * @property displayName
+ * @type {String}
+ */
+
+
+SingleGameContainer.displayName = 'SingleGameContainer';
+
+/**
+ * @property propTypes
+ * @type {Object}
+ */
+SingleGameContainer.propTypes = {
+    /**
+     * @props getSingleGame
+     * @type {Function}
+     */
+    getSingleGame: _react.PropTypes.func,
+
+    /**
+     * @props params
+     * @type {Object}
+     */
+    params: _react.PropTypes.object
+};
+
+/**
+ * @method mapStateToProps
+ * @param {Object} state
+ * @return {Object}
+ */
+function mapStateToProps(state) {
+    return {
+        game: state.game.payload
+    };
+}
+
+/**
+ * @method mapDispatchToProps
+ * @param {Object} dispatch
+ * @return {Object}
+ */
+function mapDispatchToProps(dispatch) {
+    return {
+        getSingleGame: function getSingleGame(id) {
+            return dispatch((0, _SingleGameActions.getSingleGame)(id));
+        }
+    };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SingleGameContainer);
+
+},{"../../../domain/game/actions/SingleGameActions":316,"./SingleGameView":309,"react":243,"react-redux":22}],309:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @class SingleGameView
+ */
+
+var SingleGameView = function (_React$Component) {
+    _inherits(SingleGameView, _React$Component);
+
+    function SingleGameView() {
+        _classCallCheck(this, SingleGameView);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(SingleGameView).apply(this, arguments));
+    }
+
+    _createClass(SingleGameView, [{
+        key: '_composeAddToOwned',
+
+        /**
+         * @method _composeAddToOwned
+         * @return {JSX}
+         */
+        value: function _composeAddToOwned() {
+            // TODO: change to enueration
+            // if (this.props.game.status !== 'wantit') {
+            //     return null;
+            // }
+
+            return _react2.default.createElement(
+                'a',
+                { href: '#' },
+                'Add to Owned'
+            );
+        }
+
+        /**
+         * @method render
+         * @return {JSX}
+         */
+
+    }, {
+        key: 'render',
+        value: function render() {
+            var game = this.props.game;
+
+
+            if (!game) {
+                return null;
+            }
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    game.title
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'Status: ',
+                    game.status
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    'Votes: ',
+                    game.votes
+                ),
+                this._composeAddToOwned()
+            );
+        }
+    }]);
+
+    return SingleGameView;
+}(_react2.default.Component);
+
+/**
+ * @property displayName
+ * @type {String}
+ */
+
+
+exports.default = SingleGameView;
+SingleGameView.displayName = 'SingleGameView';
+
+/**
+ * @props propTypes
+ * @type {Object}
+ */
+SingleGameView.propTypes = {
+    /**
+     * @props game
+     * @type {Object}
+     */
+    game: _react.PropTypes.object
+};
+
+},{"react":243}],310:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28137,11 +28394,6 @@ var App = exports.App = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(
-          'div',
-          null,
-          'HEADER'
-        ),
         this.props.children
       );
     }
@@ -28173,7 +28425,7 @@ App.propTypes = {
 
 exports.default = App;
 
-},{"react":243}],309:[function(require,module,exports){
+},{"react":243}],311:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28199,7 +28451,7 @@ var UUID = exports.UUID = _tcomb2.default.refinement(_tcomb2.default.String, fun
     return REGEX.UUID.test(s);
 }, 'UUID');
 
-},{"tcomb":256}],310:[function(require,module,exports){
+},{"tcomb":256}],312:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -28213,7 +28465,7 @@ var ENDPOINTS_GAMES = exports.ENDPOINTS_GAMES = 'http://localhost:3003';
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],311:[function(require,module,exports){
+},{}],313:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28231,8 +28483,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ENDPOINT = _endpoints.ENDPOINTS_GAMES + '/games';
 
 exports.default = {
+    /**
+     * Return a list of Game objects
+     *
+     * @method getGamesList
+     * @return {Array}
+     */
     getGamesList: function getGamesList() {
         return _axios2.default.get('' + ENDPOINT).then(function (response) {
+            return response;
+        }).catch(function (error) {
+            throw error;
+        });
+    },
+
+    /**
+     * Return a single game object
+     *
+     * @method getSingleGame
+     * @type {Object}
+     */
+    getSingleGame: function getSingleGame(id) {
+        return _axios2.default.get(ENDPOINT + '/' + id).then(function (response) {
             return response;
         }).catch(function (error) {
             throw error;
@@ -28240,7 +28512,7 @@ exports.default = {
     }
 };
 
-},{"../endpoints":310,"axios":1}],312:[function(require,module,exports){
+},{"../endpoints":312,"axios":1}],314:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28287,7 +28559,7 @@ var ListGameStateType = exports.ListGameStateType = BaseGameStateType.extend({
     payload: _tcomb2.default.maybe(GameListType)
 }, 'ListGameStateType');
 
-},{"../BaseTypes":309,"tcomb":256}],313:[function(require,module,exports){
+},{"../BaseTypes":311,"tcomb":256}],315:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28342,7 +28614,62 @@ var getGamesList = exports.getGamesList = function getGamesList() {
     };
 };
 
-},{"../GameRepository":311}],314:[function(require,module,exports){
+},{"../GameRepository":313}],316:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getSingleGame = exports.GET_SINGLE_GAME_FAIL = exports.GET_SINGLE_GAME_SUCCESS = exports.GET_SINGLE_GAME_START = undefined;
+
+var _GameRepository = require('../GameRepository');
+
+var _GameRepository2 = _interopRequireDefault(_GameRepository);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var GET_SINGLE_GAME_START = exports.GET_SINGLE_GAME_START = 'GET_SINGLE_GAME_START';
+var GET_SINGLE_GAME_SUCCESS = exports.GET_SINGLE_GAME_SUCCESS = 'GET_SINGLE_GAME_SUCCESS';
+var GET_SINGLE_GAME_FAIL = exports.GET_SINGLE_GAME_FAIL = 'GET_SINGLE_GAME_FAIL';
+
+/* istanbul ignore next */
+var getSingleGameStart = function getSingleGameStart() {
+    return {
+        type: GET_SINGLE_GAME_START
+    };
+};
+
+/* istanbul ignore next */
+var getSingleGameSuccess = function getSingleGameSuccess(payload) {
+    return {
+        type: GET_SINGLE_GAME_SUCCESS,
+        payload: payload
+    };
+};
+
+/* istanbul ignore next */
+var getSingleGameError = function getSingleGameError(errors) {
+    return {
+        type: GET_SINGLE_GAME_SUCCESS,
+        payload: null,
+        errors: errors
+    };
+};
+
+var getSingleGame = exports.getSingleGame = function getSingleGame(id) {
+    return function (dispatch) {
+        dispatch(getSingleGameStart());
+
+        return _GameRepository2.default.getSingleGame(id).then(function (response) {
+            return dispatch(getSingleGameSuccess(response));
+        }).catch(function (error) {
+            dispatch(getSingleGameError(error));
+            throw error;
+        });
+    };
+};
+
+},{"../GameRepository":313}],317:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28387,7 +28714,52 @@ exports.default = (0, _reduxCreateReducer.createReducer)(INITIAL_STATE, (_create
     });
 }), _createReducer));
 
-},{"../GameTypes":312,"../actions/GameListActions":313,"redux-create-reducer":244}],315:[function(require,module,exports){
+},{"../GameTypes":314,"../actions/GameListActions":315,"redux-create-reducer":244}],318:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createReducer;
+
+var _reduxCreateReducer = require('redux-create-reducer');
+
+var _GameTypes = require('../GameTypes');
+
+var _SingleGameActions = require('../actions/SingleGameActions');
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var INITIAL_STATE = new _GameTypes.SingleGameStateType({
+    isLoading: false,
+    payload: null,
+    errors: null
+});
+
+var mergeState = function mergeState(state, updates) {
+    return _GameTypes.SingleGameStateType.update(state, { $merge: updates });
+};
+
+exports.default = (0, _reduxCreateReducer.createReducer)(INITIAL_STATE, (_createReducer = {}, _defineProperty(_createReducer, _SingleGameActions.GET_SINGLE_GAME_START, function () {
+    return mergeState(INITIAL_STATE, {
+        isLoading: true
+    });
+}), _defineProperty(_createReducer, _SingleGameActions.GET_SINGLE_GAME_SUCCESS, function (state, _ref) {
+    var payload = _ref.payload;
+    return mergeState(state, {
+        isLoading: false,
+        payload: payload.data
+    });
+}), _defineProperty(_createReducer, _SingleGameActions.GET_SINGLE_GAME_FAIL, function (state, _ref2) {
+    var errors = _ref2.errors;
+    return mergeState(state, {
+        isLoading: false,
+        errors: errors
+    });
+}), _createReducer));
+
+},{"../GameTypes":314,"../actions/SingleGameActions":316,"redux-create-reducer":244}],319:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28400,15 +28772,20 @@ var _GameListReducer = require('./domain/game/reducers/GameListReducer');
 
 var _GameListReducer2 = _interopRequireDefault(_GameListReducer);
 
+var _SingleGameReducer = require('./domain/game/reducers/SingleGameReducer');
+
+var _SingleGameReducer2 = _interopRequireDefault(_SingleGameReducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function () {
     return (0, _redux.combineReducers)({
-        games: _GameListReducer2.default
+        games: _GameListReducer2.default,
+        game: _SingleGameReducer2.default
     });
 };
 
-},{"./domain/game/reducers/GameListReducer":314,"redux":251}],316:[function(require,module,exports){
+},{"./domain/game/reducers/GameListReducer":317,"./domain/game/reducers/SingleGameReducer":318,"redux":251}],320:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28419,7 +28796,8 @@ exports.default = function (store) {
     return _react2.default.createElement(
         _reactRouter.Route,
         { component: _content2.default, path: '/' },
-        _react2.default.createElement(_reactRouter.IndexRoute, { component: _GameListContainer2.default })
+        _react2.default.createElement(_reactRouter.IndexRoute, { component: _GameListContainer2.default }),
+        _react2.default.createElement(_reactRouter.Route, { component: _SingleGameContainer2.default, path: 'games/:id' })
     );
 };
 
@@ -28437,9 +28815,17 @@ var _GameListContainer = require('./content/Game/List/GameListContainer');
 
 var _GameListContainer2 = _interopRequireDefault(_GameListContainer);
 
+var _SingleGameContainer = require('./content/Game/Single/SingleGameContainer');
+
+var _SingleGameContainer2 = _interopRequireDefault(_SingleGameContainer);
+
+var _SingleGameView = require('./content/Game/Single/SingleGameView');
+
+var _SingleGameView2 = _interopRequireDefault(_SingleGameView);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./content":308,"./content/Game/List/GameListContainer":307,"react":243,"react-router":58}]},{},[305])
+},{"./content":310,"./content/Game/List/GameListContainer":307,"./content/Game/Single/SingleGameContainer":308,"./content/Game/Single/SingleGameView":309,"react":243,"react-router":58}]},{},[305])
 
 
 //# sourceMappingURL=bundle.js.map

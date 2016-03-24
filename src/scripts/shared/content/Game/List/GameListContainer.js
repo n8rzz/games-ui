@@ -4,15 +4,12 @@ import { getGamesList } from '../../../domain/game/actions/GameListActions';
 import GameList from './GameList';
 
 /**
- * React entry component
- * All other components will inherit from this component
- *
  * @class  GameListContainer
  */
 export class GameListContainer extends React.Component {
 
     /**
-     * @method  render
+     * @method render
      * @return {JSX}
      */
     render() {
