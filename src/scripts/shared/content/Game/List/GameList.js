@@ -42,7 +42,7 @@ export default class GameList extends React.Component {
                 <div>
                     <h1>Games</h1>
                     <div>
-                        <a href="#">Add Game</a>
+                        <Link to="games/create">Add Game</Link>
                     </div>
                     <ul>
                         { this.composeGameList() }

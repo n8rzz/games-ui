@@ -20,7 +20,7 @@ module.exports = function(gulp, config) {
             debug: true
         })
         .transform(babelify, {
-            presets: ['es2015']
+            presets: ['es2015', 'react', 'stage-0']
         })
         .bundle()
         .pipe(source('bundle.js'))
