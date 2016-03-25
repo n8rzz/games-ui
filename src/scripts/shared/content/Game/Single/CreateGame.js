@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import t from 'tcomb-form';
 import { RaisedButton } from 'material-ui';
+import { createGame } from '../../../domain/game/actions/SingleGameActions';
 import { NewGameType } from '../../../domain/game/GameTypes';
 
 const Form = t.form.Form;
@@ -19,7 +21,7 @@ class CreateGame extends React.Component {
                 <h1>Create a New Game</h1>
 
                 <Form
-                    ref="newGame"
+                    ref="newGameForm"
                     type={ NewGameType } />
 
                 <RaisedButton
@@ -37,7 +39,12 @@ class CreateGame extends React.Component {
      * @callback
      */
     onSubmit = () => {
-        console.log('save: ', this.refs.newGame.getValue());
+        const newGameFormValues = this.refs.newGameForm.getValue();
+
+        if (newGameFormValues !== null) {
+            console.log('save: ', newGameFormValues);
+            this.props.createGame(newGameFormValues);
+        }
     };
 }
 
@@ -58,7 +65,35 @@ CreateGame.propTypes = {
      * @props
      * @type Function
      */
-    onCreateGame: PropTypes.func
+    onCreateGame: PropTypes.func,
+
+    /**
+     * @props createGame
+     * @type {Function}
+     */
+    createGame: PropTypes.func
 };
 
-export default CreateGame;
+/**
+ * @method mapStateToProps
+ * @return {Object}
+ */
+function mapStateToProps() {
+    return {};
+}
+
+/**
+ * @method mapDispatchToProps
+ * @param {Object} dispatch
+ * @return {Object}
+ */
+function mapDispatchToProps(dispatch) {
+    return {
+        createGame: (formValues) => dispatch(createGame(formValues))
+    };
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CreateGame);

@@ -1,5 +1,5 @@
 import faker from 'faker';
-import { VALID_POSITIVE, VALID_UUID } from './BaseTypes';
+import { VALID_UUID } from './BaseTypes';
 
 export const VALID_NEW_GAME = {
     title: faker.hacker.adjective()
@@ -12,7 +12,7 @@ export const INVALID_NEW_GAME = {
 export const VALID_GAME = {
     id: VALID_UUID,
     title: faker.hacker.adjective(),
-    votes: 13,
+    votes: 0,
     status: 'wantit'
 };
 

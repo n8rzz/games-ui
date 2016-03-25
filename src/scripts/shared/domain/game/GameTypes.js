@@ -1,5 +1,5 @@
 import t from 'tcomb';
-import { Positive, UUID } from '../BaseTypes';
+import { UUID } from '../BaseTypes';
 
 export const NewGameType = t.struct({
     title: t.String
@@ -13,8 +13,8 @@ export const GameStatusType = t.enums({
 export const GameType = t.struct({
     id: UUID,
     title: t.String,
-    votes: Positive,
-    status: t.String // GameStatusType
+    votes: t.Number,
+    status: GameStatusType
 }, 'GameType');
 
 export const GameListType = t.list( GameType, 'GameListType');

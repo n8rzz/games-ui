@@ -22,10 +22,22 @@ export default {
      * Return a single game object
      *
      * @method getSingleGame
-     * @type {Object}
      */
     getSingleGame: id => {
         return request.get(`${ENDPOINT}/${id}`)
+            .then(response => response)
+            .catch(error => {
+                throw error;
+            });
+    },
+
+    /**
+     * Creates a new game object
+     *
+     * @method createGame
+     */
+    createGame: formValues => {
+        return request.post(`${ENDPOINT}`, formValues)
             .then(response => response)
             .catch(error => {
                 throw error;

@@ -12,7 +12,7 @@ export class SingleGameContainer extends React.Component {
      * @return {Function}
      */
     componentWillMount() {
-        return this.props.getSingleGame(this.props.params.id);
+        this.props.getSingleGame(this.props.params.id);
     }
 
     /**

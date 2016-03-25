@@ -1,4 +1,3 @@
-global.ENDPOINT = 'http://localhost:3002';
+global.ENDPOINTS_GAMES = 'https://shrouded-lowlands-92761.herokuapp.com';
 
-export const ENDPOINTS = 'http://localhost:3002';
-export const ENDPOINTS_GAMES = 'http://localhost:3003';
+export const ENDPOINTS_GAMES = 'https://shrouded-lowlands-92761.herokuapp.com';
