@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 
 /**
  * React entry component
@@ -15,6 +16,14 @@ export class App extends React.Component {
     render() {
         return (
             <div>
+                <ul>
+                    <li>
+                        <Link to="/">Games</Link>
+                    </li>
+                    <li>
+                        <Link to="/games/create">Add Game</Link>
+                    </li>
+                </ul>
                 { this.props.children }
             </div>
         );

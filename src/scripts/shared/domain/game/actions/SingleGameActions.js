@@ -34,3 +34,38 @@ export const getSingleGame = (id) => {
             });
     };
 };
+
+export const CREATE_GAME_START = 'CREATE_GAME_START';
+export const CREATE_GAME_SUCCESS = 'CREATE_GAME_SUCCESS';
+export const CREATE_GAME_FAIL = 'CREATE_GAME_FAIL';
+
+/* istanbul ignore next */
+const createGameStart = () => ({
+    type: CREATE_GAME_START
+});
+
+/* istanbul ignore next */
+const createGameSuccess = payload => ({
+    type: CREATE_GAME_SUCCESS,
+    payload: payload
+});
+
+/* istanbul ignore next */
+const createGameError = errors => ({
+    type: CREATE_GAME_SUCCESS,
+    payload: null,
+    errors
+});
+
+export const createGame = (id) => {
+    return dispatch => {
+        dispatch(createGameStart());
+
+        return GameRepository.createGame(id)
+            .then(response => dispatch(createGameSuccess(response)))
+            .catch(error => {
+                dispatch(createGameError(error));
+                throw error;
+            });
+    };
+};

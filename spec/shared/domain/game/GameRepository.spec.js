@@ -28,3 +28,55 @@ ava('getGamesList completes request if there is a network error', async test => 
     test.ok(getGamesList.isDone());
     test.ok(error);
 });
+
+ava('getSingleGame returns a GameType', async test => {
+    const getSingleGame = nock(global.NOCK_SCOPE)
+        .get('/games/1')
+        .reply(200, Fixtures.game.VALID_GAME);
+
+    const response = await GameRepository.getSingleGame(1);
+
+    test.ok(getSingleGame.isDone());
+    test.ok(response);
+});
+
+ava('getSingleGame completes request if there is a network error', async test => {
+    const getSingleGame = nock(global.NOCK_SCOPE)
+        .get('/games/1')
+        .reply(500, 'Error');
+
+    const error = await GameRepository.getSingleGame(1)
+        .then(() => false)
+        .catch(response => response.status === 500);
+
+    test.ok(getSingleGame.isDone());
+    test.ok(error);
+});
+
+ava('createGame returns a GameType', async test => {
+    const newGameRequest = Fixtures.game.VALID_NEW_GAME;
+
+    const createGame = nock(global.NOCK_SCOPE)
+        .post('/games', newGameRequest)
+        .reply(200, Fixtures.game.VALID_GAME);
+
+    const response = await GameRepository.createGame(newGameRequest);
+
+    test.ok(createGame.isDone());
+    test.ok(response);
+});
+
+ava('createGame completes request if there is a network error', async test => {
+    const newGameRequest = Fixtures.game.VALID_NEW_GAME;
+
+    const createGame = nock(global.NOCK_SCOPE)
+        .post('/games', newGameRequest)
+        .reply(500, 'Error');
+
+    const error = await GameRepository.createGame(newGameRequest)
+        .then(() => false)
+        .catch(response => response.status === 500);
+
+    test.ok(createGame.isDone());
+    test.ok(error);
+});

@@ -11,4 +11,5 @@
 !/log/.keep
 /tmp
 node_modules
+build/assets/*
 coverage
