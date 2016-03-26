@@ -1,4 +1,5 @@
 import request from 'axios';
+// import { GameType } from './GameTypes';
 import { ENDPOINTS_GAMES } from '../endpoints';
 
 const ENDPOINT = `${ENDPOINTS_GAMES}/games`;
@@ -26,9 +27,7 @@ export default {
     getSingleGame: id => {
         return request.get(`${ENDPOINT}/${id}`)
             .then(response => response)
-            .catch(error => {
-                throw error;
-            });
+            .catch(error => error);
     },
 
     /**
@@ -39,8 +38,6 @@ export default {
     createGame: formValues => {
         return request.post(`${ENDPOINT}`, formValues)
             .then(response => response)
-            .catch(error => {
-                throw error;
-            });
+            .catch(error => error);
     }
 };

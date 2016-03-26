@@ -17,7 +17,7 @@ const getSingleGameSuccess = payload => ({
 
 /* istanbul ignore next */
 const getSingleGameError = errors => ({
-    type: GET_SINGLE_GAME_SUCCESS,
+    type: GET_SINGLE_GAME_FAIL,
     payload: null,
     errors
 });
@@ -28,10 +28,7 @@ export const getSingleGame = (id) => {
 
         return GameRepository.getSingleGame(id)
             .then(response => dispatch(getSingleGameSuccess(response)))
-            .catch(error => {
-                dispatch(getSingleGameError(error));
-                throw error;
-            });
+            .catch(error => dispatch(getSingleGameError(error)));
     };
 };
 
@@ -52,7 +49,7 @@ const createGameSuccess = payload => ({
 
 /* istanbul ignore next */
 const createGameError = errors => ({
-    type: CREATE_GAME_SUCCESS,
+    type: CREATE_GAME_FAIL,
     payload: null,
     errors
 });
@@ -63,9 +60,6 @@ export const createGame = (id) => {
 
         return GameRepository.createGame(id)
             .then(response => dispatch(createGameSuccess(response)))
-            .catch(error => {
-                dispatch(createGameError(error));
-                throw error;
-            });
+            .catch(error => dispatch(createGameError(error)));
     };
 };

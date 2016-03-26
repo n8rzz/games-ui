@@ -1,5 +1,5 @@
 import ava from 'ava';
-import sinon from 'sinon'
+import sinon from 'sinon';
 import 'sinon-as-promised';
 
 import {
@@ -43,18 +43,17 @@ ava('getSingleGame when successful dispatches success action', async t => {
     t.is(objectPassedToSecondDispatch.payload, 'Success');
 });
 
-// ava('getSingleGame when failure dispatches fail action', async t => {
-//     const dispatchSpy = sinon.spy();
-//     GameRepository.getSingleGame = sinon.stub().rejects('Fail');
-//     await getSingleGame()(dispatchSpy);
-//
-//     t.is(dispatchSpy.callCount, 2);
-//     const objectPassedToSecondDispatch = dispatchSpy.getCall(1).args[0];
-//
-//     console.log(objectPassedToSecondDispatch);
-//     t.is(objectPassedToSecondDispatch.type, GET_SINGLE_GAME_FAIL);
-//     t.is(objectPassedToSecondDispatch.payload.message, 'Fail');
-// });
+ava('getSingleGame when failure dispatches fail action', async t => {
+    const dispatchSpy = sinon.spy();
+    GameRepository.getSingleGame = sinon.stub().rejects('Fail');
+    await getSingleGame()(dispatchSpy);
+
+    t.is(dispatchSpy.callCount, 2);
+    const objectPassedToSecondDispatch = dispatchSpy.getCall(1).args[0];
+
+    t.is(objectPassedToSecondDispatch.type, GET_SINGLE_GAME_FAIL);
+    t.is(objectPassedToSecondDispatch.errors.message, 'Fail');
+});
 
 ava('createGame dispatches createGame', async t => {
     const dispatchSpy = sinon.spy();
@@ -84,15 +83,14 @@ ava('createGame when successful dispatches success action', async t => {
     t.is(objectPassedToSecondDispatch.payload, 'Success');
 });
 
-// ava('createGame when failure dispatches fail action', async t => {
-//     const dispatchSpy = sinon.spy();
-//     GameRepository.createGame = sinon.stub().rejects('Fail');
-//     await createGame()(dispatchSpy);
-//
-//     t.is(dispatchSpy.callCount, 2);
-//     const objectPassedToSecondDispatch = dispatchSpy.getCall(1).args[0];
-//
-//     console.log(objectPassedToSecondDispatch);
-//     t.is(objectPassedToSecondDispatch.type, GET_SINGLE_GAME_FAIL);
-//     t.is(objectPassedToSecondDispatch.payload.message, 'Fail');
-// });
+ava('createGame when failure dispatches fail action', async t => {
+    const dispatchSpy = sinon.spy();
+    GameRepository.createGame = sinon.stub().rejects('Fail');
+    await createGame()(dispatchSpy);
+
+    t.is(dispatchSpy.callCount, 2);
+    const objectPassedToSecondDispatch = dispatchSpy.getCall(1).args[0];
+
+    t.is(objectPassedToSecondDispatch.type, CREATE_GAME_FAIL);
+    t.is(objectPassedToSecondDispatch.errors.message, 'Fail');
+});
