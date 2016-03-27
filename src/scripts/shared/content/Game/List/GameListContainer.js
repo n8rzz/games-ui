@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { getGamesList } from '../../../domain/game/actions/GameListActions';
 import {
-    getGamesList,
     addVote,
     addToOwned
-} from '../../../domain/game/actions/GameListActions';
+} from '../../../domain/game/actions/SingleGameActions';
 import GameList from './GameList';
 
 /**
@@ -41,7 +41,7 @@ export class GameListContainer extends React.Component {
      * @callback
      */
     addVote = (id) => {
-        console.log('addVote: ', id);
+        return this.props.addVote(id);
     }
 
     /**

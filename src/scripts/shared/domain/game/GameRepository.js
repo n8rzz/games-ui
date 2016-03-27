@@ -27,7 +27,9 @@ export default {
     getSingleGame: id => {
         return request.get(`${ENDPOINT}/${id}`)
             .then(response => response)
-            .catch(error => error);
+            .catch(error => {
+                throw error;
+            });
     },
 
     /**
@@ -38,6 +40,21 @@ export default {
     createGame: formValues => {
         return request.post(`${ENDPOINT}`, formValues)
             .then(response => response)
-            .catch(error => error);
+            .catch(error => {
+                throw error;
+            });
+    },
+
+    /**
+     * Adda single vote to a game
+     *
+     * @method addVote
+     */
+    addVote: id => {
+        return request.post(`${ENDPOINT}/${id}/vote`)
+            .then(response => response)
+            .catch(error => {
+                throw error;
+            });
     }
 };

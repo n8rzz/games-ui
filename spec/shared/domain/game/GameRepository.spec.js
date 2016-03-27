@@ -50,7 +50,7 @@ ava('getSingleGame completes request if there is a network error', async test =>
         .catch(response => response.status === 500);
 
     test.ok(getSingleGame.isDone());
-    // test.ok(error);
+    test.ok(error);
 });
 
 ava('createGame returns a GameType', async test => {
@@ -78,5 +78,33 @@ ava('createGame completes request if there is a network error', async test => {
         .catch(response => response.status === 500);
 
     test.ok(createGame.isDone());
-    // test.ok(error);
+    test.ok(error);
+});
+
+ava('addVote returns a GameType', async test => {
+    const addVoteRequest = Fixtures.baseType.VALID_UUID;
+
+    const addVote = nock(global.NOCK_SCOPE)
+        .post(`/games/${addVoteRequest}/vote`)
+        .reply(200, Fixtures.game.VALID_GAME);
+
+    const response = await GameRepository.addVote(addVoteRequest);
+
+    test.ok(addVote.isDone());
+    test.ok(response);
+});
+
+ava('addVote completes request if there is a network error', async test => {
+    const addVoteRequest = Fixtures.baseType.VALID_UUID;
+
+    const addVote = nock(global.NOCK_SCOPE)
+        .post(`/games/${addVoteRequest}/vote`)
+        .reply(500, 'Error');
+
+    const error = await GameRepository.addVote(addVoteRequest)
+        .then(() => false)
+        .catch(response => response.status === 500);
+
+    test.ok(addVote.isDone());
+    test.ok(error);
 });
