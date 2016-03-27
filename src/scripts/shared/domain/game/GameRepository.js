@@ -46,12 +46,25 @@ export default {
     },
 
     /**
-     * Adda single vote to a game
+     * Add a single vote to a game
      *
      * @method addVote
      */
     addVote: id => {
         return request.post(`${ENDPOINT}/${id}/vote`)
+            .then(response => response)
+            .catch(error => {
+                throw error;
+            });
+    },
+
+    /**
+     * Change a Game status from `wantit` to `ownit`
+     *
+     * @method purchaseGame
+     */
+    purchaseGame: id => {
+        return request.post(`${ENDPOINT}/${id}/purchase`)
             .then(response => response)
             .catch(error => {
                 throw error;

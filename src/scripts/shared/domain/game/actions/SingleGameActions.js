@@ -102,8 +102,39 @@ export const addVote = id => {
     };
 };
 
+export const PURCHASE_GAME_START = 'PURCHASE_GAME_START';
+export const PURCHASE_GAME_SUCCESS = 'PURCHASE_GAME_SUCCESS';
+export const PURCHASE_GAME_FAIL = 'PURCHASE_GAME_FAIL';
 
 /* istanbul ignore next */
-export const addToOwned = (id) => {
-    console.log('action.addToOwned: ', id);
+const purchaseGameStart = () => ({
+    type: PURCHASE_GAME_START
+});
+
+/* istanbul ignore next */
+const purchaseGameSuccess = payload => ({
+    type: PURCHASE_GAME_SUCCESS,
+    payload: payload
+});
+
+/* istanbul ignore next */
+const purchaseGameError = errors => ({
+    type: PURCHASE_GAME_FAIL,
+    payload: null,
+    errors
+});
+
+/**
+ * @method purchaseGame
+ * @param {UUID|String} id
+ */
+export const purchaseGame = id => {
+    return dispatch => {
+        dispatch(purchaseGameStart());
+
+        return GameRepository.purchaseGame(id)
+            .then(response => dispatch(purchaseGameSuccess(response)))
+            .then(() => dispatch(getGamesList()))
+            .catch(error => dispatch(purchaseGameError(error)));
+    };
 };

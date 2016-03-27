@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getGamesList } from '../../../domain/game/actions/GameListActions';
 import {
     addVote,
-    addToOwned
+    purchaseGame
 } from '../../../domain/game/actions/SingleGameActions';
 import GameList from './GameList';
 
@@ -28,29 +28,30 @@ export class GameListContainer extends React.Component {
             <div>
                 <GameList
                     games={ this.props.games }
-                    onAddVote={ this.addVote }
-                    onAddToOwned={ this.addToOwned } />
+                    onAddVote={ this.onAddVote }
+                    onPurchaseGame={ this.onPurchaseGame } />
             </div>
         );
     }
 
 
     /**
-     * @method addVote
+     * @method onAddVote
      * @param {UUID|String} id
      * @callback
      */
-    addVote = (id) => {
+    onAddVote = id => {
         return this.props.addVote(id);
     }
 
     /**
-     * @method addToOwned
+     * @method onPurchaseGame
      * @param {UUID|String} id
      * @callback
      */
-    addToOwned = (id) => {
-        console.log('addToOwned: ', id);
+    onPurchaseGame = id => {
+        console.log('onPurchaseGame: ', id);
+        return this.props.purchaseGame(id);
     }
 }
 
@@ -85,10 +86,10 @@ GameListContainer.propTypes = {
     addVote: PropTypes.func,
 
     /**
-     * @props addToOwned
+     * @props purchaseGame
      * @type {Function}
      */
-    addToOwned: PropTypes.func
+    purchaseGame: PropTypes.func
 };
 
 /**
@@ -111,7 +112,7 @@ function mapDispatchToProps(dispatch) {
     return {
         getGamesList: () => dispatch(getGamesList()),
         addVote: (id) => dispatch(addVote(id)),
-        addToOwned: (id) => dispatch(addToOwned(id))
+        purchaseGame: (id) => dispatch(purchaseGame(id))
     };
 }
 
