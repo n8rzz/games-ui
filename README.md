@@ -1,5 +1,5 @@
-# SS-Octopus
-> A React starter app!  Complete with React, Redux, Babel, Browserify and Tcomb.  Built on a super simple Hapi server.  Task running by Gulp with a Swagger-mock-api already in place.  Testing with Ava and Nyc
+# Games-UI [![Build Status](https://travis-ci.org/n8rzz/games-ui.svg?branch=master)](https://travis-ci.org/n8rzz/games-ui) [![Coverage Status](https://coveralls.io/repos/github/n8rzz/games-ui/badge.svg?branch=master)](https://coveralls.io/github/n8rzz/games-ui?branch=master)
+> The front-end portion of the Games challange
 
 ## Installation
 Clone this repo then run
@@ -38,5 +38,3 @@ Now you're up and running!
 
 
 ###Happy Reacting!!
-
-
