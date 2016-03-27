@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import { RaisedButton } from 'material-ui';
+
 
 /**
  * React entry component
@@ -8,6 +10,52 @@ import { Link } from 'react-router';
  * @class  GameList
  */
 export default class GameList extends React.Component {
+
+    /**
+     * @method _composeAddVote
+     * @param {GameType|Object} game
+     * @return {JSX}
+     */
+    _composeAddVote(game) {
+        // TODO: replace with enum
+        if (game.status !== 'wantit') {
+            return null;
+        }
+
+        return (
+            <div>
+                <RaisedButton
+                    primary={ true }
+                    disabled={ false }
+                    onClick={ () => this.props.onAddVote(game.id) }>
+                    + Add Vote
+                </RaisedButton>
+            </div>
+        );
+    }
+
+    /**
+     * @method _composeAddToOwned
+     * @param {GameType|Object} game
+     * @return {JSX}
+     */
+    _composeAddToOwned(game) {
+        // TODO: replace with enum
+        if (game.status !== 'wantit') {
+            return null;
+        }
+
+        return (
+            <div>
+                <RaisedButton
+                    primary={ false }
+                    disabled={ false }
+                    onClick={ () => this.props.onAddToOwned(game.id) }>
+                    + Add To Owned
+                </RaisedButton>
+            </div>
+        );
+    }
 
     /**
      * @method composeGameList
@@ -22,11 +70,15 @@ export default class GameList extends React.Component {
             return (
                 <li key={ index }>
                     <div>
-                        ID: <Link to={ pathToSingleGame }>{ game.id }</Link>
+                        <h2>
+                            <Link to={ pathToSingleGame }>{ game.title }</Link>
+                        </h2>
                     </div>
-                    <div>Title: { game.title }</div>
+                    <div>ID: { game.id }</div>
                     <div>Votes: { game.votes }</div>
                     <div>Status: { game.status }</div>
+                    { this._composeAddVote(game) }
+                    { this._composeAddToOwned(game) }
                 </li>
             );
         });
@@ -72,5 +124,17 @@ GameList.propTypes = {
      * @props games
      * @type Array
      */
-    games: PropTypes.array
+    games: PropTypes.array,
+
+    /**
+     * @props onAddVote
+     * @type {Function}
+     */
+    onAddVote: PropTypes.func,
+
+    /**
+     * @props onAddToOwned
+     * @type {Function}
+     */
+    onAddToOwned: PropTypes.func
 };

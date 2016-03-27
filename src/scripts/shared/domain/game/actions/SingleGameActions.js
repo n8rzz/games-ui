@@ -1,4 +1,5 @@
 import GameRepository from '../GameRepository';
+import { getGamesList } from './GameListActions';
 
 export const GET_SINGLE_GAME_START = 'GET_SINGLE_GAME_START';
 export const GET_SINGLE_GAME_SUCCESS = 'GET_SINGLE_GAME_SUCCESS';
@@ -17,21 +18,18 @@ const getSingleGameSuccess = payload => ({
 
 /* istanbul ignore next */
 const getSingleGameError = errors => ({
-    type: GET_SINGLE_GAME_SUCCESS,
+    type: GET_SINGLE_GAME_FAIL,
     payload: null,
     errors
 });
 
-export const getSingleGame = (id) => {
+export const getSingleGame = id => {
     return dispatch => {
         dispatch(getSingleGameStart());
 
         return GameRepository.getSingleGame(id)
             .then(response => dispatch(getSingleGameSuccess(response)))
-            .catch(error => {
-                dispatch(getSingleGameError(error));
-                throw error;
-            });
+            .catch(error => dispatch(getSingleGameError(error)));
     };
 };
 
@@ -52,20 +50,60 @@ const createGameSuccess = payload => ({
 
 /* istanbul ignore next */
 const createGameError = errors => ({
-    type: CREATE_GAME_SUCCESS,
+    type: CREATE_GAME_FAIL,
     payload: null,
     errors
 });
 
-export const createGame = (id) => {
+export const createGame = id => {
     return dispatch => {
         dispatch(createGameStart());
 
         return GameRepository.createGame(id)
             .then(response => dispatch(createGameSuccess(response)))
-            .catch(error => {
-                dispatch(createGameError(error));
-                throw error;
-            });
+            .catch(error => dispatch(createGameError(error)));
     };
+};
+
+export const ADD_VOTE_START = 'ADD_VOTE_START';
+export const ADD_VOTE_SUCCESS = 'ADD_VOTE_SUCCESS';
+export const ADD_VOTE_FAIL = 'ADD_VOTE_FAIL';
+
+/* istanbul ignore next */
+const addVoteStart = () => ({
+    type: ADD_VOTE_START
+});
+
+/* istanbul ignore next */
+const addVoteSuccess = payload => ({
+    type: ADD_VOTE_SUCCESS,
+    payload: payload
+});
+
+/* istanbul ignore next */
+const addVoteError = errors => ({
+    type: ADD_VOTE_FAIL,
+    payload: null,
+    errors
+});
+
+/**
+ * @method addVote
+ * @param {UUID|String} id
+ */
+export const addVote = id => {
+    return dispatch => {
+        dispatch(addVoteStart());
+
+        return GameRepository.addVote(id)
+            .then(response => dispatch(addVoteSuccess(response)))
+            .then(() => dispatch(getGamesList()))
+            .catch(error => dispatch(addVoteError(error)));
+    };
+};
+
+
+/* istanbul ignore next */
+export const addToOwned = (id) => {
+    console.log('action.addToOwned: ', id);
 };

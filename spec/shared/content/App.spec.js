@@ -4,12 +4,7 @@ import { shallow } from 'enzyme';
 
 import { App } from '../../../src/scripts/shared/content';
 
-const props = {
-    books: [
-        { id: '', name: ''},
-        { id: '', name: ''}
-    ]
-};
+const props = {};
 
 ava('App root component renders in DOM', t => {
     const Component = React.createElement(App, props);

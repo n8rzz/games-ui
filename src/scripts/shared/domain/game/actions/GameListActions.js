@@ -17,7 +17,7 @@ const getGameListSuccess = payload => ({
 
 /* istanbul ignore next */
 const getGameListError = errors => ({
-    type: GET_GAME_LIST_SUCCESS,
+    type: GET_GAME_LIST_FAIL,
     payload: null,
     errors
 });
@@ -28,9 +28,6 @@ export const getGamesList = () => {
 
         return GameRepository.getGamesList()
             .then(response => dispatch(getGameListSuccess(response)))
-            .catch(error => {
-                dispatch(getGameListError(error));
-                throw error;
-            });
+            .catch(error => dispatch(getGameListError(error)));
     };
 };
