@@ -63,3 +63,13 @@ export const createGame = (id) => {
             .catch(error => dispatch(createGameError(error)));
     };
 };
+
+
+export const addVote = (id) => {
+    console.log('action.addVote: ', id);
+};
+
+
+export const addToOwned = (id) => {
+    console.log('action.addToOwned: ', id);
+};

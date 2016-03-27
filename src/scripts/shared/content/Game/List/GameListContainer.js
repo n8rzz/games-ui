@@ -1,6 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getGamesList } from '../../../domain/game/actions/GameListActions';
+import {
+    getGamesList,
+    addVote,
+    addToOwned
+} from '../../../domain/game/actions/GameListActions';
 import GameList from './GameList';
 
 /**
@@ -9,15 +13,44 @@ import GameList from './GameList';
 export class GameListContainer extends React.Component {
 
     /**
+     * @method componentWillMount
+     */
+    componentWillMount() {
+        return this.props.getGamesList();
+    }
+
+    /**
      * @method render
      * @return {JSX}
      */
     render() {
         return (
             <div>
-                <GameList games={ this.props.games } />
+                <GameList
+                    games={ this.props.games }
+                    onAddVote={ this.addVote }
+                    onAddToOwned={ this.addToOwned } />
             </div>
         );
+    }
+
+
+    /**
+     * @method addVote
+     * @param {UUID|String} id
+     * @callback
+     */
+    addVote = (id) => {
+        console.log('addVote: ', id);
+    }
+
+    /**
+     * @method addToOwned
+     * @param {UUID|String} id
+     * @callback
+     */
+    addToOwned = (id) => {
+        console.log('addToOwned: ', id);
     }
 }
 
@@ -37,7 +70,25 @@ GameListContainer.propTypes = {
      * @props games
      * @type Array
      */
-    games: PropTypes.array
+    games: PropTypes.array,
+
+    /**
+     * @props getGamesList
+     * @type {Function}
+     */
+    getGamesList: PropTypes.func,
+
+    /**
+     * @props addVote
+     * @type {Function}
+     */
+    addVote: PropTypes.func,
+
+    /**
+     * @props addToOwned
+     * @type {Function}
+     */
+    addToOwned: PropTypes.func
 };
 
 /**
@@ -58,7 +109,9 @@ function mapStateToProps(state) {
  */
 function mapDispatchToProps(dispatch) {
     return {
-        games: dispatch(getGamesList())
+        getGamesList: () => dispatch(getGamesList()),
+        addVote: (id) => dispatch(addVote(id)),
+        addToOwned: (id) => dispatch(addToOwned(id))
     };
 }
 
@@ -69,12 +122,12 @@ function mapDispatchToProps(dispatch) {
  * @param {Object} ownProps
  * @return {Object}
  */
-function mergeProps(state, dispatch, ownProps) {
-    return Object.assign({}, state, ownProps);
-}
+// function mergeProps(state, dispatch, ownProps) {
+//     console.log(state, dispatch, ownProps);
+//     return Object.assign({}, state, ownProps);
+// }
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps,
-    mergeProps
+    mapDispatchToProps
 )(GameListContainer);
