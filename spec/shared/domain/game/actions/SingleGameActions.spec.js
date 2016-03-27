@@ -16,7 +16,12 @@ import {
     ADD_VOTE_START,
     ADD_VOTE_SUCCESS,
     ADD_VOTE_FAIL,
-    addVote
+    addVote,
+
+    PURCHASE_GAME_START,
+    PURCHASE_GAME_SUCCESS,
+    PURCHASE_GAME_FAIL,
+    purchaseGame
 } from '../../../../../src/scripts/shared/domain/game/actions/SingleGameActions';
 
 import { getGamesList } from '../../../../../src/scripts/shared/domain/game/actions/GameListActions';
@@ -139,5 +144,45 @@ ava('addVote when failure dispatches fail action', async t => {
     const objectPassedToSecondDispatch = dispatchSpy.getCall(1).args[0];
 
     t.is(objectPassedToSecondDispatch.type, ADD_VOTE_FAIL);
+    t.is(objectPassedToSecondDispatch.errors.message, 'Fail');
+});
+
+ava('purchaseGame dispatches purchaseGame', async t => {
+    const dispatchSpy = sinon.spy();
+    GameRepository.purchaseGame = sinon.stub().resolves('Success');
+    await purchaseGame()(dispatchSpy);
+
+    t.ok(dispatchSpy.calledWith({ type: PURCHASE_GAME_START }));
+});
+
+ava('purchaseGame calls the repository', async t => {
+    const dispatchSpy = sinon.spy();
+    GameRepository.purchaseGame = sinon.stub().resolves('Success');
+    await purchaseGame()(dispatchSpy);
+
+    t.ok(GameRepository.purchaseGame.called);
+});
+
+ava('purchaseGame when successful dispatches success action', async t => {
+    const dispatchSpy = sinon.spy();
+    GameRepository.purchaseGame = sinon.stub().resolves('Success');
+    await purchaseGame()(dispatchSpy);
+
+    t.is(dispatchSpy.callCount, 3);
+    const objectPassedToSecondDispatch = dispatchSpy.getCall(1).args[0];
+
+    t.is(objectPassedToSecondDispatch.type, PURCHASE_GAME_SUCCESS);
+    t.is(objectPassedToSecondDispatch.payload, 'Success');
+});
+
+ava('purchaseGame when failure dispatches fail action', async t => {
+    const dispatchSpy = sinon.spy();
+    GameRepository.purchaseGame = sinon.stub().rejects('Fail');
+    await purchaseGame()(dispatchSpy);
+
+    t.is(dispatchSpy.callCount, 2);
+    const objectPassedToSecondDispatch = dispatchSpy.getCall(1).args[0];
+
+    t.is(objectPassedToSecondDispatch.type, PURCHASE_GAME_FAIL);
     t.is(objectPassedToSecondDispatch.errors.message, 'Fail');
 });

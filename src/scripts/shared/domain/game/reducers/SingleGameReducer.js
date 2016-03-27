@@ -11,7 +11,11 @@ import {
 
     ADD_VOTE_START,
     ADD_VOTE_SUCCESS,
-    ADD_VOTE_FAIL
+    ADD_VOTE_FAIL,
+
+    PURCHASE_GAME_START,
+    PURCHASE_GAME_SUCCESS,
+    PURCHASE_GAME_FAIL
 } from '../actions/SingleGameActions';
 
 const INITIAL_STATE = new SingleGameStateType({
@@ -69,8 +73,8 @@ export default createReducer(INITIAL_STATE, {
         }
     ),
 
-    [ADD_VOTE_START]: () => mergeState(
-        INITIAL_STATE,
+    [ADD_VOTE_START]: (state) => mergeState(
+        state,
         {
             isLoading: true
         }
@@ -85,6 +89,29 @@ export default createReducer(INITIAL_STATE, {
     ),
 
     [ADD_VOTE_FAIL]: (state, { errors }) => mergeState(
+        state,
+        {
+            isLoading: false,
+            errors
+        }
+    ),
+
+    [PURCHASE_GAME_START]: (state) => mergeState(
+        state,
+        {
+            isLoading: true
+        }
+    ),
+
+    [PURCHASE_GAME_SUCCESS]: (state, { payload }) => mergeState(
+        state,
+        {
+            isLoading: false,
+            payload: payload.data
+        }
+    ),
+
+    [PURCHASE_GAME_FAIL]: (state, { errors }) => mergeState(
         state,
         {
             isLoading: false,

@@ -50,7 +50,7 @@ export default class GameList extends React.Component {
                 <RaisedButton
                     primary={ false }
                     disabled={ false }
-                    onClick={ () => this.props.onAddToOwned(game.id) }>
+                    onClick={ () => this.props.onPurchaseGame(game.id) }>
                     + Add To Owned
                 </RaisedButton>
             </div>
@@ -133,8 +133,8 @@ GameList.propTypes = {
     onAddVote: PropTypes.func,
 
     /**
-     * @props onAddToOwned
+     * @props onPurchaseGame
      * @type {Function}
      */
-    onAddToOwned: PropTypes.func
+    onPurchaseGame: PropTypes.func
 };

@@ -108,3 +108,31 @@ ava('addVote completes request if there is a network error', async test => {
     test.ok(addVote.isDone());
     test.ok(error);
 });
+
+ava('purchaseGame returns a GameType', async test => {
+    const purchaseGameRequest = Fixtures.baseType.VALID_UUID;
+
+    const purchaseGame = nock(global.NOCK_SCOPE)
+        .post(`/games/${purchaseGameRequest}/purchase`)
+        .reply(200, Fixtures.game.VALID_GAME);
+
+    const response = await GameRepository.purchaseGame(purchaseGameRequest);
+
+    test.ok(purchaseGame.isDone());
+    test.ok(response);
+});
+
+ava('purchaseGame completes request if there is a network error', async test => {
+    const purchaseGameRequest = Fixtures.baseType.VALID_UUID;
+
+    const purchaseGame = nock(global.NOCK_SCOPE)
+        .post(`/games/${purchaseGameRequest}/purchase`)
+        .reply(500, 'Error');
+
+    const error = await GameRepository.purchaseGame(purchaseGameRequest)
+        .then(() => false)
+        .catch(response => response.status === 500);
+
+    test.ok(purchaseGame.isDone());
+    test.ok(error);
+});
